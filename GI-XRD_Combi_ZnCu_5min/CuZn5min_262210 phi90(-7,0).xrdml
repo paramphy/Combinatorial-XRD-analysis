@@ -1,0 +1,118 @@
+﻿<?xml version="1.0"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/2.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/2.3 http://www.xrdml.com/XRDMeasurement/2.3/XRDMeasurement.xsd" status="Completed" recordIdentifier="{F876BCC4-39C9-4B66-8282-C71DC3F1594B}">
+	<comment>
+		<entry>Configuration=5-axes Cradle, Owner=Empyrean1, Creation date=1/14/2022 1:48:27 PM</entry>
+		<entry>Goniometer=Theta/Theta; Minimum step size 2Theta:0.0001; Minimum step size Omega:0.0001</entry>
+		<entry>Sample stage=Chi-Phi-x-y-z stage 240 mm; Minimum step size Phi:0.01; Minimum step size Chi:0.01; Minimum step size X:0.01; Minimum step size Y:0.01; Minimum step size Z:0.001</entry>
+		<entry>Diffractometer system=EMPYREAN</entry>
+		<entry>Measurement program=C:\XRD Data\DataEmpyrean\MaterialScience\Francesco\Measurement 0.3 GIXRD final.xrdmp, Created identifier={4353D2C6-343F-4D16-B29C-5A4F19283864}, Created by=Empyrean1, Id=WL:EMPYREAN.user.uu.se:Empyrean1, Creation date=3/23/2026 4:38:06 PM, Modified identifier={F4F4A774-E2FE-4E7F-9804-05CB8AE0658F}, Modified by=Empyrean1, Id=WL:EMPYREAN.user.uu.se:Empyrean1, Modification date=10/15/2026 4:32:15 PM</entry>
+		<entry>Fine Calibration Offset for 2Theta = -0.0054 deg</entry>
+		<entry>Batch program=C:\XRD Data\DataEmpyrean\MaterialScience\Francesco\Batch GIXRD_5x5scans_align.xrdmp, Created identifier={A2E4D8E5-D39F-41B7-8AD3-43BA39C3A56A}, Created by=Empyrean1, Id=WL:EMPYREAN.user.uu.se:Empyrean1, Creation date=3/4/2026 3:23:21 PM, Modified identifier={DEEE710B-838D-4B54-BC7F-40C18AD1E1A0}, Modified by=Empyrean1, Id=WL:EMPYREAN.user.uu.se:Empyrean1, Modification date=10/22/2026 3:41:42 PM</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id></id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Scan" status="Completed" sampleMode="Reflection">
+		<comment>
+			<entry>GIXRD0,.40(004)</entry>
+			<entry>PHD Lower Level = 4.02 (keV), PHD Upper Level = 11.26 (keV)</entry>
+		</comment>
+		<usedWavelength intended="K-Alpha">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean Cu LFF HR (9430 033 7310x) DK433953">
+				<tension unit="kV">45.0</tension>
+				<current unit="mA">40.0</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Line">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">4.4</takeOffAngle>
+				</focus>
+			</xRayTube>
+			<xRayMirror id="27030001" name="Focusing X-ray mirror for Cu radiation" hybrid="false">
+				<crystal type="Graded" shape="Elliptic">W/Si</crystal>
+				<acceptanceAngle unit="deg">0.800</acceptanceAngle>
+				<length unit="mm">55.3</length>
+			</xRayMirror>
+			<divergenceSlit id="22010007" name="Fixed slit 1/8°" xsi:type="fixedDivergenceSlitType">
+				<distanceToSample unit="mm">179.60</distanceToSample>
+				<height unit="mm">0.19</height>
+			</divergenceSlit>
+		</incidentBeamPath>
+		<sampleOffset>
+			<position axis="2Theta" unit="deg">0.0000</position>
+		</sampleOffset>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<antiScatterSlit id="22060010" name="PASS for dCore" xsi:type="fixedAntiScatterSlitType">
+				<height unit="mm">17.00</height>
+			</antiScatterSlit>
+			<sollerSlit id="21030001" name="dCore Soller slits 0.02 rad.">
+				<opening unit="rad">0.0200</opening>
+			</sollerSlit>
+			<parallelPlateCollimator id="25020001" name="Parallel plate collimator 0.28°">
+				<opening unit="deg">0.28</opening>
+			</parallelPlateCollimator>
+			<detector id="7010020" name="PIXcel3D-Medipix3 1x1 detector" xsi:type="areaDetectorType">
+				<phd unit="%">
+					<lowerLevel>25.0</lowerLevel>
+					<upperLevel>70.0</upperLevel>
+				</phd>
+				<mode>Receiving slit</mode>
+				<activeChannelsEquatorial>255</activeChannelsEquatorial>
+				<activeChannelsAxial>255</activeChannelsAxial>
+				<pitchEquatorial unit="mm">0.05500</pitchEquatorial>
+				<pitchAxial unit="mm">0.05500</pitchAxial>
+				<readOutPeriod unit="seconds">0.050</readOutPeriod>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Continuous" scanAxis="2Theta" status="Completed">
+			<header>
+				<startTimeStamp>2026-10-23T00:11:32+02:00</startTimeStamp>
+				<endTimeStamp>2026-10-23T01:32:36+02:00</endTimeStamp>
+				<author>
+					<name>Empyrean1</name>
+				</author>
+				<source>
+					<applicationSoftware version="7.6">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="8.3  20230607">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011264053</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<startPosition>25.0125</startPosition>
+					<endPosition>69.9875</endPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>0.3000</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<commonPosition>90.00</commonPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<positions axis="X" unit="mm">
+					<commonPosition>-7.50</commonPosition>
+				</positions>
+				<positions axis="Y" unit="mm">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>3.013</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">2.376</commonCountingTime>
+				<counts unit="counts">8 10 9 2 12 9 7 3 13 11 10 7 11 8 15 5 5 12 11 13 27 9 5 9 6 10 9 11 3 11 5 8 7 8 11 10 12 17 12 11 9 10 6 13 3 12 12 14 13 8 10 11 14 10 14 19 17 11 16 12 17 33 11 13 17 26 30 23 18 18 18 24 37 34 19 42 24 37 40 27 42 45 49 43 41 39 58 45 46 48 45 55 41 59 66 41 43 47 53 58 52 62 53 52 52 42 61 55 48 49 50 57 62 68 65 57 75 85 80 71 90 79 75 92 102 97 104 104 94 107 126 138 144 132 145 136 170 161 174 213 208 220 235 249 224 242 242 259 250 237 278 266 207 241 237 249 222 206 182 195 205 187 160 142 150 150 138 124 119 113 129 100 89 84 86 82 63 66 77 85 76 54 63 66 44 66 54 60 51 59 49 40 49 49 36 33 44 43 35 37 37 26 34 40 20 27 38 41 31 20 37 26 25 22 16 19 18 28 25 18 19 19 21 29 32 27 23 16 19 28 18 18 22 14 21 17 14 18 24 21 14 14 12 11 15 20 8 15 14 12 16 12 13 18 23 10 18 15 16 8 21 18 15 19 14 9 14 29 16 7 16 14 10 13 6 16 5 14 12 11 18 10 15 8 11 11 12 15 12 7 18 15 15 11 8 11 13 13 16 13 14 20 14 16 8 19 10 20 13 12 16 11 15 18 12 21 24 17 14 14 11 17 26 10 8 20 12 16 19 12 17 18 19 15 10 14 17 8 9 10 2 5 9 8 17 11 10 15 12 13 9 10 15 15 12 8 13 7 6 9 12 9 6 11 19 8 8 8 4 13 15 4 8 6 11 8 2 9 5 7 11 5 8 7 10 3 7 5 3 8 6 6 3 6 7 8 4 7 6 5 7 6 6 6 6 7 6 8 8 10 3 6 4 6 5 1 3 4 3 7 3 3 4 3 5 5 6 8 5 4 6 6 5 4 3 4 6 4 3 7 5 6 5 0 4 6 2 5 3 8 3 6 7 7 5 5 3 7 7 10 5 2 4 6 3 3 3 9 1 3 7 7 2 1 3 7 5 4 10 4 3 2 2 5 6 4 6 3 5 1 6 4 4 4 3 11 4 6 6 4 7 4 6 4 3 2 2 5 8 5 7 6 5 5 3 9 10 5 3 3 9 3 1 2 2 2 3 6 2 4 1 6 3 3 8 1 3 14 4 2 1 5 1 4 5 1 2 4 3 4 4 2 4 5 5 3 4 6 3 5 6 3 4 8 4 3 2 0 5 5 9 6 7 2 2 3 25 5 3 6 1 4 5 4 8 6 9 5 2 3 4 1 3 2 2 4 4 3 3 4 2 2 4 3 4 2 6 4 6 5 9 4 3 3 2 4 6 8 3 18 2 5 4 4 20 3 3 5 1 5 0 5 2 4 2 0 4 3 7 6 8 6 3 2 2 10 5 4 4 2 3 1 6 5 6 3 3 1 2 2 5 5 6 3 2 6 5 5 2 2 2 4 3 4 6 1 7 3 3 4 0 10 3 3 4 4 5 4 6 8 5 5 4 5 6 5 4 8 3 2 5 9 7 8 1 5 5 7 4 5 4 4 7 3 5 5 11 5 8 4 5 3 4 7 9 6 5 25 12 12 6 12 13 20 13 16 10 18 13 18 16 15 22 14 16 18 15 14 21 9 15 27 6 14 10 20 5 6 12 3 7 6 8 9 7 5 3 3 3 3 7 2 7 9 2 3 2 4 5 6 4 5 7 7 7 4 5 6 3 6 2 1 6 5 6 8 9 6 8 1 4 11 6 7 7 4 5 8 6 3 4 5 8 7 4 11 7 10 6 4 8 7 9 10 5 3 5 4 10 13 14 4 9 7 14 12 9 12 14 6 10 11 19 11 8 13 20 9 11 14 9 18 11 12 10 16 18 13 13 15 11 16 21 15 18 22 12 13 19 24 22 35 26 23 26 21 25 29 31 23 26 31 37 42 33 40 40 35 40 31 41 49 55 59 44 63 50 52 58 62 65 67 69 62 59 60 52 68 58 70 76 51 60 62 45 66 57 62 58 45 48 48 67 52 43 39 49 38 37 40 41 31 36 19 21 25 25 26 30 19 20 23 21 20 21 29 16 24 21 6 19 16 13 18 12 13 7 17 8 15 14 11 8 10 11 15 17 17 11 15 10 13 18 8 14 10 15 16 12 5 9 9 8 34 10 11 11 3 6 7 7 6 11 14 6 10 9 2 26 8 7 11 9 10 8 11 11 7 12 7 14 9 7 5 7 6 4 9 6 7 5 7 8 9 7 4 4 7 6 4 8 10 2 5 7 9 8 5 5 10 5 6 2 7 3 7 6 8 8 8 5 8 6 3 8 7 3 4 9 6 10 6 6 11 3 8 6 6 5 12 4 10 5 5 9 6 4 3 4 5 4 7 3 9 8 4 5 7 14 10 6 4 3 4 11 6 3 8 4 7 8 5 5 3 6 7 3 8 4 9 8 6 6 8 3 3 5 5 4 8 2 7 2 4 6 5 3 1 6 3 3 2 5 4 5 10 4 8 6 3 9 4 10 5 8 9 4 6 4 4 9 7 8 12 7 10 5 2 6 4 5 10 9 5 5 7 10 6 11 2 11 8 6 20 6 6 4 6 4 5 11 12 9 6 8 1 11 9 5 6 10 3 3 11 8 4 13 6 9 7 8 12 12 14 14 9 13 8 11 10 12 9 8 14 9 21 15 13 16 19 12 10 11 24 11 24 16 11 23 21 25 24 27 24 23 29 18 25 34 26 33 27 33 35 30 34 33 30 36 33 33 35 30 25 35 34 34 27 39 43 34 38 33 33 39 40 37 34 39 22 24 36 29 32 22 31 18 37 28 20 22 21 39 27 21 22 15 16 27 18 15 13 18 19 14 10 9 18 12 13 14 7 17 7 7 7 8 10 6 10 5 10 13 11 17 6 10 10 8 11 11 10 8 5 8 10 5 4 2 8 6 7 4 8 6 11 13 5 5 10 9 3 5 9 11 8 5 4 7 7 6 2 4 3 6 8 11 9 5 7 3 9 3 9 1 6 7 5 7 5 4 1 3 4 3 7 4 6 2 3 4 4 6 14 5 4 5 8 11 7 1 0 3 5 3 4 5 5 4 0 3 4 3 1 4 3 6 6 9 2 3 2 4 2 2 5 3 5 3 5 3 3 4 2 2 7 1 1 4 0 5 6 0 6 5 5 4 13 2 3 2 5 0 1 1 2 2 0 2 3 5 0 3 1 1 1 4 3 8 2 3 2 8 2 5 0 2 1 6 3 3 1 3 3 3 3 6 0 1 4 4 3 2 5 0 1 9 1 7 2 3 3 1 3 1 3 1 3 5 4 1 2 3 5 0 4 1 1 2 3 1 1 1 3 0 7 1 1 1 1 4 1 1 1 3 4 2 0 5 4 3 4 4 4 9 1 2 4 3 5 3 4 5 6 1 4 0 0 2 2 3 3 4 4 1 4 0 5 0 9 4 2 4 2 4 0 2 0 2 6 4 2 2 4 7 4 5 2 3 4 2 2 3 3 2 2 1 2 1 7 0 0 1 2 3 4 2 0 2 3 7 3 3 2 3 2 1 1 4 3 0 1 3 1 4 1 0 4 1 1 2 5 0 3 3 2 4 2 1 1 3 2 4 2 5 1 3 2 0 4 1 1 3 0 3 3 4 3 1 2 3 2 4 2 1 1 3 0 1 5 3 5 0 2 4 2 9 2 4 4 2 2 2 3 1 3 2 3 4 1 2 0 2 1 2 2 3 1 0 4 0 3 3 1 2 6 6 4 3 3 1 1 9 4 1 6 1 2 2 3 4 2 6 6 3 3 3 4 4 4 2 3 1 5 2 4 2 3 0 0 4 2 2 4 2 3 2 0 2 9 3 2 5 3 8 5 4 5 3 2 4 1 7 7 5 2 5 6 2 7 3 5 1 5 3 23 9 0 4 9 2 4 9 4 9 6 8 5 4 4 8 5 4 1 2 1 7 1 5 3 4 4 3 6 6 5 16 8 4 6</counts>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>

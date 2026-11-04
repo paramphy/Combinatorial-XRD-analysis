@@ -1,0 +1,254 @@
+
+# ==========================================
+# COMBINATORIAL XRD CONFIGURATION
+# ==========================================
+
+datasets:
+
+  - label: "1 min Sulfurization"
+    path: "GI-XRD_Combi_ZnCu_1min"
+    color: "#1f77b4"
+
+  - label: "2 min Sulfurization"
+    path: "GI-XRD_Combi_ZnCu_2min"
+    color: "#ff7f0e"
+
+  - label: "5 min Sulfurization"
+    path: "GI-XRD_Combi_ZnCu_5min"
+    color: "#2ca02c"
+
+  - label: "10 min Sulfurization"
+    path: "GI-XRD_Combi_ZnCu_10min"
+    color: "#d62728"
+
+
+# Measurement order
+# Coordinates are in millimetres.
+
+position_order:
+
+  - "phi0(0,-15)"
+  - "phi0(0,-7)"
+  - "phi0(0,0)"
+  - "phi0(0,7)"
+  - "phi0(0,15)"
+
+  - "phi90(-15,0)"
+  - "phi90(-7,0)"
+  - "phi90(0,0)"
+  - "phi90(7,0)"
+  - "phi90(15,0)"
+
+
+# Optional custom panel titles
+
+position_labels: {}
+
+
+# ==========================================
+# DATA PROCESSING
+# ==========================================
+
+processing:
+
+  normalization: "none"
+  # Options: none, max
+
+  subtract_constant_background: 0
+
+  clip_negative_after_background: true
+
+
+# ==========================================
+# PLOTTING SETTINGS
+# ==========================================
+
+plot:
+
+  title: "Spatially resolved XRD patterns"
+
+  xlim: [25, 70]
+
+  ncols: 5
+
+  figsize: [18, 9]
+
+  # Vertical separation between conditions
+  offset_fraction: 1.15
+
+  line_width: 1.15
+
+  title_size: 9
+
+  tick_size: 8
+
+  label_size: 11
+
+  suptitle_size: 14
+
+  show_legend: true
+
+  hide_y_ticks: true
+
+  grid: false
+
+
+# ==========================================
+# OUTPUT SETTINGS
+# ==========================================
+
+output:
+
+  directory: "xrd_output"
+
+  filename: "xrd_waterfall_by_position"
+
+  formats:
+    - png
+    - pdf
+    - svg
+
+  dpi: 600
+
+  save_processed_csv: true
+
+
+# ==========================================
+# COMBINED XRD PLOTS
+# ==========================================
+
+combined_plot:
+
+  enabled: true
+
+  save_linear: true
+
+  save_log: true
+
+  figsize: [16, 9]
+
+  line_width: 0.9
+
+  alpha: 0.75
+
+  legend_size: 8
+
+  xlim: [25, 70]
+
+  linear_title: "Combined XRD patterns - Linear scale"
+
+  log_title: "Combined XRD patterns - Logarithmic scale"
+
+
+
+# ==========================================
+# CONDITION-WISE SPATIAL XRD PLOTS
+# ==========================================
+
+condition_grid:
+
+  enabled: true
+
+  filename: "xrd_by_sulfurization_condition"
+
+  title: "Spatial XRD comparison across sulfurization conditions"
+
+  figsize: [16, 12]
+
+  xlim: [25, 70]
+
+  # Common vertical spacing for all four panels
+  offset_fraction: 1.15
+
+  line_width: 1.0
+
+  alpha: 0.9
+
+  colormap: "tab10"
+
+  title_size: 12
+
+  tick_size: 9
+
+  label_size: 12
+
+  suptitle_size: 15
+
+  legend_size: 8
+
+  hide_y_ticks: true
+
+  grid: false
+
+condition_grid:
+
+  enabled: true
+
+  filename: "xrd_by_sulfurization_condition"
+
+  figsize: [16, 12]
+
+  xlim: [25, 70]
+
+  offset_fraction: 1.15
+
+  line_width: 1.0
+
+  alpha: 0.9
+
+  colormap: "tab10"
+
+  hide_y_ticks: false
+
+
+# ==========================================
+# THEORETICAL XRD REFERENCE PATTERNS
+# ==========================================
+
+reference_patterns:
+  enabled: true
+
+  wavelength: "CuKa"
+  two_theta_range: [25, 70]
+
+  references:
+    - label: "CuS"
+      cif: "reference/CuS-1010920.cif"
+      color: "#1f77b4"  # Blue
+
+    - label: "ZnS"
+      cif: "reference/ZnS-1011195.cif"
+      color: "#d62728"  # Red
+
+  display:
+    show: true
+
+    # Select only the ten strongest theoretical reflections.
+    max_peaks: 10
+
+    # HKL labels can be enabled later if needed.
+    show_hkl: false
+    max_hkl_labels: 5
+    label_size: 6
+
+    intensity_normalization: true
+
+    stick_ymin: 0.02
+    stick_ymax: 0.10
+    stick_line_width: 1.1
+    stick_alpha: 0.9
+
+  output:
+    save_reference_plot: true
+    save_reference_csv: true
+    filename: "theoretical_XRD_reference"
+
+
+normalized_waterfall:
+  enabled: true
+  filename: "xrd_waterfall_normalized"
+  save_csv: true
+
+plot:
+  normalized_offset_fraction: 1.15
+  normalized_title: "Spatially resolved XRD patterns (normalized)"
