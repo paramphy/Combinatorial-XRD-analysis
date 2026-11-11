@@ -74,7 +74,7 @@ plot:
   figsize: [18, 9]
 
   # Vertical separation between conditions
-  offset_fraction: 1.15
+  offset_fraction: 0.5
 
   line_width: 1.15
 
@@ -99,14 +99,13 @@ plot:
 
 output:
 
-  directory: "xrd_output"
+  directory: "xrd_output_2"
 
   filename: "xrd_waterfall_by_position"
 
   formats:
     - png
-    - pdf
-    - svg
+
 
   dpi: 600
 
@@ -158,7 +157,7 @@ condition_grid:
   xlim: [25, 70]
 
   # Common vertical spacing for all four panels
-  offset_fraction: 1.15
+  offset_fraction: 0.5
 
   line_width: 1.0
 
@@ -190,7 +189,7 @@ condition_grid:
 
   xlim: [25, 70]
 
-  offset_fraction: 1.15
+  offset_fraction: 0.5
 
   line_width: 1.0
 
@@ -205,44 +204,48 @@ condition_grid:
 # THEORETICAL XRD REFERENCE PATTERNS
 # ==========================================
 
+# ============================================================
+
 reference_patterns:
   enabled: true
+  # Supported: cif or rtf
+  source: "rtf"
 
-  wavelength: "CuKa"
-  two_theta_range: [25, 70]
+  # Reference phase definitions
+  phases:
 
-  references:
-    - label: "CuS"
-      cif: "reference/CuS-1010920.cif"
-      color: "#1f77b4"  # Blue
+    CuS:
+      file: "reference/CuS_ICDD-04-008-8460.rtf"
+      color: "#2685D8"
 
-    - label: "ZnS"
-      cif: "reference/ZnS-1011195.cif"
-      color: "#d62728"  # Red
+    ZnS:
+      file: "reference/ZnS_00-074-1063.rtf"
+      color: "#D84A4A"
 
   display:
+    display:
     show: true
 
-    # Select only the ten strongest theoretical reflections.
-    max_peaks: 10
+    # Separate reference-panel layout
+    panel_row_height: 0.28
+    panel_padding: 0.08
 
-    # HKL labels can be enabled later if needed.
-    show_hkl: false
-    max_hkl_labels: 5
+    # Reference stick appearance
+    panel_line_width: 1.3
+    panel_alpha: 0.95
+
+    # Labels and ticks
+    panel_label_size: 8
+    panel_tick_size: 5
+    panel_ylabel_size: 8
+
+    # Use the figure-level xlabel for multi-panel figures.
+    panel_xlabel: true
+
+    # Existing reference-display settings
+    max_peaks: 50
+    max_hkl_labels: 0
     label_size: 6
-
-    intensity_normalization: true
-
-    stick_ymin: 0.02
-    stick_ymax: 0.10
-    stick_line_width: 1.1
-    stick_alpha: 0.9
-
-  output:
-    save_reference_plot: true
-    save_reference_csv: true
-    filename: "theoretical_XRD_reference"
-
 
 normalized_waterfall:
   enabled: true
@@ -250,5 +253,47 @@ normalized_waterfall:
   save_csv: true
 
 plot:
-  normalized_offset_fraction: 1.15
+  normalized_offset_fraction: 0.5
   normalized_title: "Spatially resolved XRD patterns (normalized)"
+
+
+peak_detection:
+  enabled: true
+
+  # Savitzky-Golay smoothing
+  smoothing_enabled: true
+  window_length: 111
+  polyorder: 3
+
+  # Prominence-based detection
+  prominence_fraction: 0.08
+  minimum_prominence: 0.05
+  min_distance_points: 1
+
+  # Diagnostic measurements
+  local_noise_window_points: 21
+
+  # Output
+  filename: "experimental_detected_peaks.csv"
+
+
+  peak_classification:
+  enabled: true
+
+  filename: "experimental_peak_classification.csv"
+
+  # Maximum allowed difference between experimental
+  # and theoretical peak positions.
+  match_tolerance_deg: 1.0
+
+  # Use every calculated theoretical reflection by default.
+  # For example, 0.02 excludes reference peaks below
+  # 2% of the strongest theoretical intensity.
+  minimum_reference_intensity_fraction: 1.0
+
+  # Diagnostic plots
+  plot_representative_pattern: true
+
+  # Choose one pattern for initial visual validation.
+  selected_condition: "Sulfurization 4"
+  selected_position: "phi0(0,0)"

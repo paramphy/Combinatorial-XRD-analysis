@@ -8,7 +8,8 @@ from matplotlib.lines import Line2D
 
 from .utils import position_key
 
-
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from mpl_toolkits.axes_grid1.axes_size import Fixed
 # ==================================================
 # COMMON DATA PREPARATION
 # ==================================================
@@ -81,18 +82,186 @@ def make_common_grid(datasets, positions, xlim=None):
     return x
 
 
+
 def add_references(
     ax,
     reference_generator,
-    reference_config
+    reference_config,
 ):
+    """
+    Add a separate reference-reflection panel below an experimental
+    XRD axes.
 
-    if reference_generator is not None and reference_config:
+    Each configured reference phase gets its own horizontal row.
+    Reflection positions are plotted as vertical sticks.
 
-        reference_generator.add_reference_sticks(
-            ax,
+    The experimental axes are not modified by reference intensities.
+    """
+
+    if reference_generator is None or not reference_config:
+        return None
+
+    display = reference_config.get("display", {})
+
+    if not display.get("show", True):
+        return None
+
+    # Get configured reference phases in their YAML order.
+    reference_items = (
+        reference_generator._get_plot_reference_items(
             reference_config
         )
+    )
+
+    # Retain only phases for which reference data were loaded.
+    available_items = [
+        item for item in reference_items
+        if item["label"] in reference_generator.references
+    ]
+
+    if not available_items:
+        return None
+
+    # Determine the visible 2theta range from the experimental axes.
+    x_min, x_max = ax.get_xlim()
+
+    # Panel height scales with the number of reference phases.
+    row_height = float(
+        display.get("panel_row_height", 0.28)
+    )
+
+    panel_padding = float(
+        display.get("panel_padding", 0.08)
+    )
+
+    panel_height = max(
+        0.45,
+        row_height * len(available_items)
+    )
+
+    divider = make_axes_locatable(ax)
+
+
+    reference_ax = divider.append_axes(
+        "bottom",
+        size=Fixed(panel_height),
+        pad=Fixed(panel_padding),
+        sharex=ax,
+    )
+
+    # --------------------------------------------------
+    # Draw one row for each reference phase
+    # --------------------------------------------------
+
+    for index, item in enumerate(available_items):
+
+        label = item["label"]
+        color = item.get("color", "black")
+
+        frame = reference_generator.references[label]
+
+        visible = frame[
+            frame["two_theta"].between(x_min, x_max)
+        ]
+
+        # First configured phase appears at the top.
+        row = len(available_items) - index - 1
+
+        if not visible.empty:
+
+            reference_ax.vlines(
+                visible["two_theta"].to_numpy(),
+                row + 0.12,
+                row + 0.88,
+                color=color,
+                linewidth=float(
+                    display.get("panel_line_width", 1.3)
+                ),
+                alpha=float(
+                    display.get("panel_alpha", 0.95)
+                ),
+            )
+
+    # --------------------------------------------------
+    # Panel formatting
+    # --------------------------------------------------
+
+    number_of_phases = len(available_items)
+
+    reference_ax.set_ylim(0, number_of_phases)
+    reference_ax.set_xlim(x_min, x_max)
+
+    reference_ax.set_yticks(
+        np.arange(number_of_phases) + 0.5
+    )
+
+    # Labels must follow the same vertical ordering as the rows.
+    reference_ax.set_yticklabels(
+        [
+            item["label"]
+            for item in reversed(available_items)
+        ],
+        fontsize=float(
+            display.get("panel_label_size", 8)
+        ),
+    )
+
+    reference_ax.tick_params(
+        axis="x",
+        labelsize=float(
+            display.get("panel_tick_size", 8)
+        ),
+        direction="out",
+        length=3,
+    )
+
+    reference_ax.tick_params(
+        axis="y",
+        length=0,
+        pad=5,
+    )
+
+    reference_ax.set_ylabel(
+        "Reference",
+        fontsize=float(
+            display.get("panel_ylabel_size", 8)
+        ),
+        labelpad=7,
+    )
+
+    reference_ax.grid(
+        axis="x",
+        linestyle=":",
+        linewidth=0.5,
+        alpha=0.35,
+    )
+
+    reference_ax.set_axisbelow(True)
+
+    # A clean panel with a visible boundary.
+    reference_ax.spines["top"].set_visible(True)
+    reference_ax.spines["right"].set_visible(False)
+    reference_ax.spines["left"].set_visible(False)
+
+    reference_ax.tick_params(
+        axis="y",
+        left=False,
+    )
+
+    # Experimental and reference axes have the same x range.
+    ax.tick_params(
+        axis="x",
+        labelbottom=False,
+    )
+
+    # Optional x-axis label for standalone plots.
+    if display.get("panel_xlabel", False):
+        reference_ax.set_xlabel(
+            r"2$\theta$ (degrees)"
+        )
+
+    return reference_ax
+
 
 def _reference_legend_handles(reference_config):
     """Create legend handles for the theoretical reference phases."""
@@ -419,11 +588,19 @@ def plot_combined(
         alpha=0.2
     )
 
-    add_references(
+    reference_panel = add_references(
         ax,
         reference_generator,
         reference_config
     )
+
+    if reference_panel is not None:
+        # Move the x-axis label below the reference panel.
+        ax.set_xlabel("")
+
+        reference_panel.set_xlabel(
+            r"2$\theta$ (degrees)"
+        )
 
     fig.tight_layout()
 
@@ -782,3 +959,265 @@ def plot_waterfall_normalized(
     )
 
     return fig, records
+
+import matplotlib.pyplot as plt
+
+
+def plot_smoothing_comparison(
+    x,
+    raw_y,
+    smoothed_y,
+    peaks=None,
+    title="XRD smoothing comparison"
+):
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.plot(
+        x,
+        raw_y,
+        color="grey",
+        alpha=0.65,
+        linewidth=0.8,
+        label="Raw data"
+    )
+
+    ax.plot(
+        x,
+        smoothed_y,
+        color="blue",
+        linewidth=1.2,
+        label="Savitzky-Golay smoothed"
+    )
+
+    if peaks is not None and not peaks.empty:
+
+        ax.scatter(
+            peaks["two_theta_deg"],
+            peaks["smoothed_intensity"],
+            color="red",
+            marker="x",
+            s=45,
+            label="Detected peaks",
+            zorder=5
+        )
+
+    ax.set_xlabel(r"2$\theta$ (degrees)")
+    ax.set_ylabel("Intensity (a.u.)")
+    ax.set_title(title)
+
+    ax.legend()
+    ax.grid(alpha=0.2)
+
+    fig.tight_layout()
+
+    return fig
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from matplotlib.patches import Circle, Polygon
+
+
+def plot_measurement_position_schematic(
+    positions,
+    diameter_mm=50.0,
+    notch_width_mm=3.0,
+    notch_depth_mm=2.0,
+    figsize=(7, 7),
+):
+    """
+    Draw a top-view schematic of a circular XRD sample.
+
+    Coordinate convention:
+        x: positive to the right
+        y: positive upwards
+        North: 12 o'clock
+
+    The triangular notch is schematic, not a dimensional
+    representation of the actual notch geometry.
+    """
+
+    radius = diameter_mm / 2.0
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    # ------------------------------------------
+    # Sample boundary
+    # ------------------------------------------
+
+    sample = Circle(
+        (0, 0),
+        radius,
+        facecolor="0.96",
+        edgecolor="black",
+        linewidth=2,
+        zorder=1,
+    )
+
+    ax.add_patch(sample)
+
+    # ------------------------------------------
+    # Triangular notch at north
+    # ------------------------------------------
+
+    notch = Polygon(
+        [
+            (-notch_width_mm / 2, radius + 0.5),
+            (notch_width_mm / 2, radius + 0.5),
+            (0, radius - notch_depth_mm),
+        ],
+        closed=True,
+        facecolor="white",
+        edgecolor="black",
+        linewidth=1.5,
+        zorder=4,
+    )
+
+    ax.add_patch(notch)
+
+    # ------------------------------------------
+    # Coordinate axes
+    # ------------------------------------------
+
+    ax.annotate(
+        "",
+        xy=(radius + 5, 0),
+        xytext=(-radius - 5, 0),
+        arrowprops=dict(
+            arrowstyle="->",
+            color="0.45",
+            linewidth=0.9,
+        ),
+    )
+
+    ax.annotate(
+        "",
+        xy=(0, radius + 7),
+        xytext=(0, -radius - 5),
+        arrowprops=dict(
+            arrowstyle="->",
+            color="0.45",
+            linewidth=0.9,
+        ),
+    )
+
+    ax.text(
+        radius + 5.5,
+        0,
+        "X (mm)",
+        ha="left",
+        va="center",
+    )
+
+    ax.text(
+        0,
+        radius + 7.5,
+        "Y (mm)",
+        ha="center",
+        va="bottom",
+    )
+
+    # ------------------------------------------
+    # Measurement positions
+    # ------------------------------------------
+
+    for index, position in enumerate(positions):
+
+        phi, x, y = position
+
+        distance = np.sqrt(x**2 + y**2)
+
+        if distance > radius:
+            raise ValueError(
+                f"Measurement position {position} "
+                f"is outside the {diameter_mm} mm sample."
+            )
+
+        ax.scatter(
+            x,
+            y,
+            s=55,
+            color="tab:red",
+            edgecolor="black",
+            linewidth=0.6,
+            zorder=5,
+        )
+
+        ax.annotate(
+            f"{index + 1}: phi{phi}({x:g},{y:g})",
+            xy=(x, y),
+            xytext=(5, 5),
+            textcoords="offset points",
+            fontsize=8,
+            zorder=6,
+        )
+
+    # ------------------------------------------
+    # Centre marker
+    # ------------------------------------------
+
+    ax.scatter(
+        0,
+        0,
+        marker="+",
+        s=90,
+        color="black",
+        linewidth=1.5,
+        zorder=6,
+    )
+
+    ax.text(
+        1,
+        -1.5,
+        "(0, 0)",
+        fontsize=8,
+    )
+
+    # ------------------------------------------
+    # North direction
+    # ------------------------------------------
+
+    ax.annotate(
+        "N",
+        xy=(0, radius + 1),
+        xytext=(0, radius + 10),
+        ha="center",
+        fontsize=12,
+        fontweight="bold",
+        arrowprops=dict(
+            arrowstyle="->",
+            linewidth=1.2,
+        ),
+    )
+
+    # ------------------------------------------
+    # Formatting
+    # ------------------------------------------
+
+    limit = radius + 13
+
+    ax.set_xlim(-limit, limit)
+    ax.set_ylim(-limit, limit)
+
+    ax.set_aspect("equal")
+
+    ax.set_title(
+        f"XRD measurement positions "
+        f"({diameter_mm:g} mm diameter sample)",
+        fontsize=12,
+    )
+
+    ax.set_xlabel("X position (mm)")
+    ax.set_ylabel("Y position (mm)")
+
+    ax.grid(
+        True,
+        linestyle=":",
+        alpha=0.35,
+    )
+
+    fig.tight_layout()
+
+    return fig
