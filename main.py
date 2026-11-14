@@ -594,22 +594,24 @@ def run(config):
 
         print(f"Saved processed data: {csv_path}")
 
-    print("\nXRD processing completed.")
-    print(f"Output directory: {output_dir}")
     fig_positions = plot_measurement_position_schematic(
-        positions,
+        positions=positions,
         diameter_mm=50.0,
+        notch_width_mm=3.0,
+        notch_depth_mm=2.0,
+        figsize=(10, 10),
+        label_fontsize=10,
     )
-    
+
     fig_positions.savefig(
         output_dir / "measurement_position_schematic.png",
-        dpi=300,
+        dpi=600,
         bbox_inches="tight",
     )
-    
+
     plt.close(fig_positions)
 
-    if output_config.get("show_figures", True):
+    if output_config.get("show_figures", False):
 
         plt.show()
 

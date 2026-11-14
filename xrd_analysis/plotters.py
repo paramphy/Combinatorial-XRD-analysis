@@ -1014,6 +1014,7 @@ def plot_smoothing_comparison(
     return fig
 
 
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -1025,42 +1026,64 @@ def plot_measurement_position_schematic(
     diameter_mm=50.0,
     notch_width_mm=3.0,
     notch_depth_mm=2.0,
-    figsize=(7, 7),
+    figsize=(10, 10),
+    label_fontsize=9,
+    dpi=300,
 ):
     """
-    Draw a top-view schematic of a circular XRD sample.
+    Draw a publication-quality top-view schematic of a circular
+    XRD sample with measurement positions.
 
-    Coordinate convention:
-        x: positive to the right
-        y: positive upwards
-        North: 12 o'clock
+    Parameters
+    ----------
+    positions : list
+        List of (phi, x, y) measurement positions.
 
-    The triangular notch is schematic, not a dimensional
-    representation of the actual notch geometry.
+    diameter_mm : float
+        Sample diameter in mm.
+
+    notch_width_mm : float
+        Schematic width of triangular notch.
+
+    notch_depth_mm : float
+        Schematic depth of triangular notch.
+
+    figsize : tuple
+        Figure dimensions.
+
+    label_fontsize : int
+        Measurement label font size.
+
+    dpi : int
+        Output resolution.
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
     """
 
     radius = diameter_mm / 2.0
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    # ------------------------------------------
-    # Sample boundary
-    # ------------------------------------------
+    # ==================================================
+    # SAMPLE
+    # ==================================================
 
     sample = Circle(
         (0, 0),
         radius,
         facecolor="0.96",
         edgecolor="black",
-        linewidth=2,
+        linewidth=2.5,
         zorder=1,
     )
 
     ax.add_patch(sample)
 
-    # ------------------------------------------
-    # Triangular notch at north
-    # ------------------------------------------
+    # ==================================================
+    # TRIANGULAR NOTCH AT NORTH
+    # ==================================================
 
     notch = Polygon(
         [
@@ -1071,15 +1094,15 @@ def plot_measurement_position_schematic(
         closed=True,
         facecolor="white",
         edgecolor="black",
-        linewidth=1.5,
+        linewidth=2,
         zorder=4,
     )
 
     ax.add_patch(notch)
 
-    # ------------------------------------------
-    # Coordinate axes
-    # ------------------------------------------
+    # ==================================================
+    # COORDINATE AXES
+    # ==================================================
 
     ax.annotate(
         "",
@@ -1087,9 +1110,10 @@ def plot_measurement_position_schematic(
         xytext=(-radius - 5, 0),
         arrowprops=dict(
             arrowstyle="->",
-            color="0.45",
-            linewidth=0.9,
+            color="0.4",
+            linewidth=1.2,
         ),
+        zorder=2,
     )
 
     ax.annotate(
@@ -1098,9 +1122,10 @@ def plot_measurement_position_schematic(
         xytext=(0, -radius - 5),
         arrowprops=dict(
             arrowstyle="->",
-            color="0.45",
-            linewidth=0.9,
+            color="0.4",
+            linewidth=1.2,
         ),
+        zorder=2,
     )
 
     ax.text(
@@ -1109,6 +1134,7 @@ def plot_measurement_position_schematic(
         "X (mm)",
         ha="left",
         va="center",
+        fontsize=11,
     )
 
     ax.text(
@@ -1117,11 +1143,50 @@ def plot_measurement_position_schematic(
         "Y (mm)",
         ha="center",
         va="bottom",
+        fontsize=11,
     )
 
-    # ------------------------------------------
-    # Measurement positions
-    # ------------------------------------------
+    # ==================================================
+    # NORTH DIRECTION
+    # ==================================================
+
+    ax.annotate(
+        "N",
+        xy=(0, radius + 1),
+        xytext=(0, radius + 10),
+        ha="center",
+        fontsize=15,
+        fontweight="bold",
+        arrowprops=dict(
+            arrowstyle="->",
+            linewidth=1.5,
+            color="black",
+        ),
+    )
+
+    # ==================================================
+    # LABEL POSITIONS
+    # ==================================================
+
+    # Offsets are in display points, not sample coordinates.
+    # They can be adjusted individually if your positions change.
+
+    label_offsets = {
+        0: (32, -5),
+        1: (32, 20),
+        2: (15, 30),
+        3: (32, 10),
+        4: (40, 15),
+        5: (-80, 35),
+        6: (-45, 35),
+        7: (35, 35),
+        8: (35, 35),
+        9: (90, 35),
+    }
+
+    # ==================================================
+    # MEASUREMENT POSITIONS
+    # ==================================================
 
     for index, position in enumerate(positions):
 
@@ -1131,70 +1196,70 @@ def plot_measurement_position_schematic(
 
         if distance > radius:
             raise ValueError(
-                f"Measurement position {position} "
-                f"is outside the {diameter_mm} mm sample."
+                f"Measurement position {position} is outside "
+                f"the {diameter_mm} mm sample."
             )
 
+        # Measurement point
         ax.scatter(
             x,
             y,
-            s=55,
-            color="tab:red",
+            s=90,
+            color="red",
             edgecolor="black",
-            linewidth=0.6,
-            zorder=5,
-        )
-
-        ax.annotate(
-            f"{index + 1}: phi{phi}({x:g},{y:g})",
-            xy=(x, y),
-            xytext=(5, 5),
-            textcoords="offset points",
-            fontsize=8,
+            linewidth=0.9,
             zorder=6,
         )
 
-    # ------------------------------------------
-    # Centre marker
-    # ------------------------------------------
+        # Label
+        label = f"{index + 1}: phi{phi}({x:g},{y:g})"
+
+        offset = label_offsets.get(index, (35, 25))
+
+        ax.annotate(
+            label,
+            xy=(x, y),
+            xytext=offset,
+            textcoords="offset points",
+            fontsize=label_fontsize,
+            ha="left" if offset[0] >= 0 else "right",
+            va="center",
+            rotation=45,
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor="white",
+                edgecolor="black",
+                linewidth=0.9,
+                alpha=0.97,
+            ),
+            arrowprops=dict(
+                arrowstyle="->",
+                color="black",
+                linewidth=1.0,
+                shrinkA=3,
+                shrinkB=5,
+                connectionstyle="arc3,rad=0.0",
+            ),
+            zorder=7,
+        )
+
+    # ==================================================
+    # SAMPLE CENTRE
+    # ==================================================
 
     ax.scatter(
         0,
         0,
         marker="+",
-        s=90,
+        s=120,
         color="black",
-        linewidth=1.5,
-        zorder=6,
+        linewidth=1.8,
+        zorder=8,
     )
 
-    ax.text(
-        1,
-        -1.5,
-        "(0, 0)",
-        fontsize=8,
-    )
-
-    # ------------------------------------------
-    # North direction
-    # ------------------------------------------
-
-    ax.annotate(
-        "N",
-        xy=(0, radius + 1),
-        xytext=(0, radius + 10),
-        ha="center",
-        fontsize=12,
-        fontweight="bold",
-        arrowprops=dict(
-            arrowstyle="->",
-            linewidth=1.2,
-        ),
-    )
-
-    # ------------------------------------------
-    # Formatting
-    # ------------------------------------------
+    # ==================================================
+    # FORMATTING
+    # ==================================================
 
     limit = radius + 13
 
@@ -1206,18 +1271,29 @@ def plot_measurement_position_schematic(
     ax.set_title(
         f"XRD measurement positions "
         f"({diameter_mm:g} mm diameter sample)",
-        fontsize=12,
+        fontsize=15,
+        pad=15,
     )
 
-    ax.set_xlabel("X position (mm)")
-    ax.set_ylabel("Y position (mm)")
+    ax.set_xlabel("X position (mm)", fontsize=12)
+    ax.set_ylabel("Y position (mm)", fontsize=12)
+
+    ax.set_xticks(np.arange(-30, 31, 10))
+    ax.set_yticks(np.arange(-30, 31, 10))
 
     ax.grid(
         True,
         linestyle=":",
+        linewidth=0.8,
         alpha=0.35,
+    )
+
+    ax.tick_params(
+        axis="both",
+        labelsize=10,
     )
 
     fig.tight_layout()
 
     return fig
+
